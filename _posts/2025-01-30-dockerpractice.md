@@ -1,5 +1,4 @@
 ---
-
 layout: single
 title:  "Docker A부터 Z까지!(실습편)"
 categories: Development
@@ -22,7 +21,7 @@ sidebar:
 
 # 도커 작동 상태 확인
 
-### docker version
+## docker version
 
 * 도커의 작동 상태를 확인할 수 있는 명령어
 * Client부와 Server부로 분리되어 출력이 나오는 것을 확인할 수 있다.
@@ -32,13 +31,13 @@ sidebar:
 Last login: Thu Jan 30 20:36:06 on ttys000
 ➜  ~ docker version
 Client:
-Version:           27.4.0
-API version:       1.47
-Go version:        go1.22.10
-Git commit:        bde2b89
-Built:             Sat Dec  7 10:35:43 2024
-OS/Arch:           darwin/arm64
-Context:           desktop-linux
+ Version:           27.4.0
+ API version:       1.47
+ Go version:        go1.22.10
+ Git commit:        bde2b89
+ Built:             Sat Dec  7 10:35:43 2024
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
 
 Server: Docker Desktop 4.37.1 (178610)
 Engine:
@@ -61,14 +60,14 @@ docker-init:
 ➜  ~
 ```
 
-### docker info
+## docker info
 
 * docker version 보다 조금 더 상세한 정보가 출력된다.
-* 클라이언트의 버전과 설치되어 있는 플러그인들의 종류를 확인할 수 있다.
+*  클라이언트의 버전과 설치되어 있는 플러그인들의 종류를 확인할 수 있다.
 * 서버 응답의 경우 현재 실행 중인 컨테이너의 개수, 이미지의 개수, 사용 중인 플러그인, 도커가 실행 중인 시스템의 OS 타입, CPU 아키텍쳐, CPU 코어, 메모리를 확인할 수 있다.
 
-  ```bash
-  ➜  ~ docker info
+```bash
+ ➜  ~ docker info
   Client:
   Version:    27.4.0
   Context:    desktop-linux
@@ -160,11 +159,117 @@ docker-init:
   Live Restore Enabled: false
   
   WARNING: daemon is not using the default seccomp profile
-  ➜  ~
-  ```
+  ➜
+```
+
+
 
 # 메뉴얼 확인
 
 ### docker --help
 
-* 
+* Management Commands와 Commands 확인 가능
+
+``` bash
+➜  ~ docker --help
+
+Usage:  docker [OPTIONS] COMMAND
+
+A self-sufficient runtime for containers
+
+Common Commands:
+  run         Create and run a new container from an image
+  exec        Execute a command in a running container
+  ps          List containers
+  build       Build an image from a Dockerfile
+  pull        Download an image from a registry
+  push        Upload an image to a registry
+  images      List images
+  login       Authenticate to a registry
+  logout      Log out from a registry
+  search      Search Docker Hub for images
+  version     Show the Docker version information
+  info        Display system-wide information
+
+Management Commands:
+  ai*         Ask Gordon - Docker Agent
+  builder     Manage builds
+  buildx*     Docker Buildx
+  compose*    Docker Compose
+  container   Manage containers
+  context     Manage contexts
+  debug*      Get a shell into any image or container
+  desktop*    Docker Desktop commands (Beta)
+  dev*        Docker Dev Environments
+  extension*  Manages Docker extensions
+  feedback*   Provide feedback, right in your terminal!
+  image       Manage images
+  init*       Creates Docker-related starter files for your project
+  manifest    Manage Docker image manifests and manifest lists
+  network     Manage networks
+  plugin      Manage plugins
+  sbom*       View the packaged-based Software Bill Of Materials (SBOM) for an image
+  scout*      Docker Scout
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+
+Swarm Commands:
+  swarm       Manage Swarm
+
+Commands:
+  attach      Attach local standard input, output, and error streams to a running container
+  commit      Create a new image from a container's changes
+  cp          Copy files/folders between a container and the local filesystem
+  create      Create a new container
+  diff        Inspect changes to files or directories on a container's filesystem
+  events      Get real time events from the server
+  export      Export a container's filesystem as a tar archive
+  history     Show the history of an image
+  import      Import the contents from a tarball to create a filesystem image
+  inspect     Return low-level information on Docker objects
+  kill        Kill one or more running containers
+  load        Load an image from a tar archive or STDIN
+  logs        Fetch the logs of a container
+  pause       Pause all processes within one or more containers
+  port        List port mappings or a specific mapping for the container
+  rename      Rename a container
+  restart     Restart one or more containers
+  rm          Remove one or more containers
+  rmi         Remove one or more images
+  save        Save one or more images to a tar archive (streamed to STDOUT by default)
+  start       Start one or more stopped containers
+  stats       Display a live stream of container(s) resource usage statistics
+  stop        Stop one or more running containers
+  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+  top         Display the running processes of a container
+  unpause     Unpause all processes within one or more containers
+  update      Update configuration of one or more containers
+  wait        Block until one or more containers stop, then print their exit codes
+
+Global Options:
+      --config string      Location of client config files (default
+                           "/Users/cream1nbbang/.docker")
+  -c, --context string     Name of the context to use to connect to the
+                           daemon (overrides DOCKER_HOST env var and
+                           default context set with "docker context use")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket to connect to
+  -l, --log-level string   Set the logging level ("debug", "info",
+                           "warn", "error", "fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default
+                           "/Users/cream1nbbang/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default
+                           "/Users/cream1nbbang/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default
+                           "/Users/cream1nbbang/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Run 'docker COMMAND --help' for more information on a command.
+
+For more help on how to use Docker, head to https://docs.docker.com/go/guides/
+➜  ~
+```
+
