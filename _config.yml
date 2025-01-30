@@ -17,7 +17,7 @@ minimal_mistakes_skin    : "sunrise" # "air", "aqua", "contrast", "dark", "dirt"
 # Site Settings
 locale                   : "ko-KR"
 rtl                      : # true, false (default) # turns direction of the page into right to left for RTL languages
-title                    : "CREAM1NBBANG BAKERY"
+title                    : "CREAM1NBBANG CODE BAKERY"
 title_separator          : "|"
 subtitle                 : "Deep Learning & Computer Vision & Autonomous Driving"
 name                     : "CHAEMIN PARK"
