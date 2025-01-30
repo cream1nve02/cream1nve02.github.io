@@ -19,7 +19,7 @@ locale                   : "ko-KR"
 rtl                      : # true, false (default) # turns direction of the page into right to left for RTL languages
 title                    : "CREAM1NBBANG BAKERY"
 title_separator          : "|"
-subtitle                 : "small positive action"
+subtitle                 : "Deep Learning & Computer Vision & Autonomous Driving"
 name                     : "CHAEMIN PARK"
 description              : "크림빵 제빵소입니다."
 url                      : "https://cream1nve02.github.io"
