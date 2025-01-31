@@ -162,11 +162,9 @@ docker-init:
   ➜
 ```
 
-
-
 # 메뉴얼 확인
 
-### docker --help
+## docker --help
 
 * Management Commands와 Commands 확인 가능
 
@@ -273,7 +271,7 @@ For more help on how to use Docker, head to https://docs.docker.com/go/guides/
 ➜  ~
 ```
 
-### docker container --help
+## docker container --help
 
 * 컨테이너 명령 다음에 어떤 명령을 입력할 수 있는 지 확인하고 싶을 때 다음과 같이 입력하면 된다.
 
@@ -315,7 +313,7 @@ Run 'docker container COMMAND --help' for more information on a command.
 ➜  ~
 ```
 
-### docker container run --help
+## docker container run --help
 
 * 컨테이너를 실행할 때 사용할 수 있는 옵션들을 확인할 수 있다.
 
@@ -500,6 +498,68 @@ Options:
                                          container(s)
   -w, --workdir string                   Working directory inside the
                                          container
+➜  ~
+```
+
+
+
+# Nginx 실행 및 삭제하기
+
+##  docker run -p 80:80 --name hellonginx nginx
+
+* 웹 서버 기능을 제공하는 Nginx 이미지를 다운받고 hellonginx 컨테이너를 생성하여 실행하는 명령어는 다음과 같이 입력할 수 있다.
+* nginx는 한 번 실행시키면 사용자가 종료 명령 (Ctrl + C)을 주기 전까지 터미널을 점유하면서 실행 상태를 유지한다.
+* 실행 후 웹 브라우저 상에 localhost라고 쳐서 들어가면 Nginx에 접근할 수 있다.
+
+```bash
+➜  ~ docker run -p 80:80 --name hellonginx nginx
+Unable to find image 'nginx:latest' locally
+latest: Pulling from library/nginx
+066d623ff8e6: Download complete
+49486a4a61a6: Download complete
+6d24e34787c7: Download complete
+2b39a3d0829e: Download complete
+34d83bb3522a: Download complete
+7ce705000c39: Download complete
+b3e9225c8fca: Download complete
+Digest: sha256:0a399eb16751829e1af26fea27b20c3ec28d7ab1fb72182879dcae1cca21206a
+Status: Downloaded newer image for nginx:latest
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: info: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: info: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Sourcing /docker-entrypoint.d/15-local-resolvers.envsh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+2025/01/30 23:55:02 [notice] 1#1: using the "epoll" event method
+2025/01/30 23:55:02 [notice] 1#1: nginx/1.27.3
+2025/01/30 23:55:02 [notice] 1#1: built by gcc 12.2.0 (Debian 12.2.0-14)
+2025/01/30 23:55:02 [notice] 1#1: OS: Linux 6.10.14-linuxkit
+2025/01/30 23:55:02 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2025/01/30 23:55:02 [notice] 1#1: start worker processes
+2025/01/30 23:55:02 [notice] 1#1: start worker process 29
+2025/01/30 23:55:02 [notice] 1#1: start worker process 30
+2025/01/30 23:55:02 [notice] 1#1: start worker process 31
+2025/01/30 23:55:02 [notice] 1#1: start worker process 32
+2025/01/30 23:55:02 [notice] 1#1: start worker process 33
+2025/01/30 23:55:02 [notice] 1#1: start worker process 34
+2025/01/30 23:55:02 [notice] 1#1: start worker process 35
+2025/01/30 23:55:02 [notice] 1#1: start worker process 36
+2025/01/30 23:55:02 [notice] 1#1: start worker process 37
+2025/01/30 23:55:02 [notice] 1#1: start worker process 38
+
+```
+
+## docker rm hellonginx
+
+* 만들어진 hellonginx를 제거하기 위해서는 다음과 같은 명령어를 사용한다.
+* 해당 컨테이너의 이름이 출력된다면, 정상적으로 제거된 것이다.
+
+``` bash
+➜  ~ docker rm hellonginx
+hellonginx
 ➜  ~
 ```
 
