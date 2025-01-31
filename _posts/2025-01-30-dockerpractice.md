@@ -563,3 +563,82 @@ hellonginx
 ➜  ~
 ```
 
+# Docker Image
+
+## docker Image ls
+
+* 현재 로컬 PC에 존재하는 모든 이미지를 조회할 수 있다.
+
+```bash
+➜  ~ docker image ls
+REPOSITORY                             TAG       IMAGE ID       CREATED        SIZE
+ubuntu_gui                             latest    4cd8ada2778e   2 weeks ago    9.73GB
+<none>                                 <none>    f9a4fec9d324   3 weeks ago    166MB
+portainer/portainer-docker-extension   2.21.5    f57d844d2311   6 weeks ago    391MB
+nginx                                  latest    0a399eb16751   2 months ago   280MB
+➜  ~
+```
+
+* 특정 이름의 이미지만 조회할 수도 있다.
+  * REPOSITORY : 이미지의 이름
+  * TAG : 이미지의 버전
+  * IMAGE ID : 고유한 ID
+  * CREATED : 만들어진 날짜
+  * SIZE : 용량
+
+```bash
+➜  ~ docker image ls nginx
+REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+nginx        latest    0a399eb16751   2 months ago   280MB
+➜  ~
+```
+
+## docker run -d --name {컨테이너명} {이미지명}
+
+* 컨테이너명을 사용자가 지정하면서 컨테이너를 생성할 수 있다.
+* -d : 백그라운드에서 컨테이너를 실행한다.
+* 아래 명령어는 nginx 이미지를 백그라운드 형태로 3개의 컨테이너를 생성한다.
+
+```bash
+➜  ~ docker run -d --name multinginx1 nginx
+6ba9db40f7ff998a048f6937b5a10cd82aff88047845a780e8f6a678c7537b51
+➜  ~ docker run -d --name multinginx2 nginx
+a045da889d2c621ab2478def39111299057b36e32ce36af28df383643fe0698e
+➜  ~ docker run -d --name multinginx3 nginx
+c0203737561b745681e2d423f3660147a17623fb0e30f5edaaac451bc944815d
+➜  ~
+```
+
+## docker ps
+
+* 현재 실행 중인 컨테이너 리스트를 조회하고 싶을 때 사용한다.
+* 현재 3개의 컨테이너가 실행중인 것을 확인할 수 있다.
+
+```bash
+➜  ~ docker ps
+CONTAINER ID   IMAGE     COMMAND                   CREATED         STATUS         PORTS     NAMES
+c0203737561b   nginx     "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   80/tcp    multinginx3
+a045da889d2c   nginx     "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   80/tcp    multinginx2
+6ba9db40f7ff   nginx     "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   80/tcp    multinginx1
+➜  ~
+```
+
+
+
+## docker rm -f
+
+* docker rm 명령만으로는 실행 중인 컨테이너를 삭제할 수 없다.
+* 실행 중인 컨테이너를 삭제하고 싶을 때에는 -f 옵션을 사용해야 한다.
+* 복수의 컨테이너를 한 번에 삭제하는 것도 가능하다.
+
+```bash
+ ➜  ~ docker rm multinginx1
+Error response from daemon: cannot remove container "/multinginx1": container is running: stop the container before removing or force remove
+➜  ~ docker rm -f multinginx1
+multinginx1
+➜  ~ docker rm -f multinginx2 multinginx3
+multinginx2
+multinginx3
+➜  ~
+```
+
