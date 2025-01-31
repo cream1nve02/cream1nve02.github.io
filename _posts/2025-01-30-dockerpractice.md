@@ -1,7 +1,7 @@
 ---
 layout: single
 title:  "Docker A부터 Z까지!(실습편)"
-categories: Development
+categories: Docker
 tag: [docker]
 toc: true
 toc_sticky: true
@@ -565,7 +565,7 @@ hellonginx
 ➜  ~
 ```
 
-# Docker Image
+# Docker 기본 명령어
 
 ## docker Image ls
 
@@ -625,6 +625,16 @@ a045da889d2c   nginx     "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes
 ➜  ~
 ```
 
+* 종료된 컨테이너를 모두 확인하고 싶다면, docker ps -a 를 사용한다.
+
+```bash
+➜  ~ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                   CREATED          STATUS                     PORTS     NAMES
+b4f3e70745ac   nginx     "/docker-entrypoint.…"   6 minutes ago    Exited (0) 6 minutes ago             customCmd
+6a094bb23363   nginx     "/docker-entrypoint.…"   12 minutes ago   Up 12 minutes              80/tcp    defaultCmd
+➜  ~
+```
+
 
 
 ## docker rm -f
@@ -641,6 +651,705 @@ multinginx1
 ➜  ~ docker rm -f multinginx2 multinginx3
 multinginx2
 multinginx3
+➜  ~
+```
+
+# Docker inspect
+
+도커 이미지의 메타데이터를 덮어 씌어보기 위한 명령어들이다.
+
+## docker image inspect 이미지명
+
+* 아래 명령을 통해 nginx 이미지의 메타데이터를 확인할 수 있다.
+
+* 이미지 아이디, 태그, 생성된 시간, Env, Cmd 필드 확인 가능
+* Env : nginx 버전, PATH 환경 변수 확인
+* Cmd : nginx -g daemon off
+
+````bash
+➜  ~ docker image inspect nginx
+[
+    {
+        "Id": "sha256:0a399eb16751829e1af26fea27b20c3ec28d7ab1fb72182879dcae1cca21206a",
+        "RepoTags": [
+            "nginx:latest"
+        ],
+        "RepoDigests": [
+            "nginx@sha256:0a399eb16751829e1af26fea27b20c3ec28d7ab1fb72182879dcae1cca21206a"
+        ],
+        "Parent": "",
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2024-11-26T18:42:08Z",
+        "DockerVersion": "27.4.0",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "80/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NGINX_VERSION=1.27.3",
+                "NJS_VERSION=0.8.7",
+                "NJS_RELEASE=1~bookworm",
+                "PKG_RELEASE=1~bookworm",
+                "DYNPKG_RELEASE=1~bookworm"
+            ],
+            "Cmd": [
+                "nginx",
+                "-g",
+                "daemon off;"
+            ],
+            "Image": "",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/docker-entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>"
+            },
+            "StopSignal": "SIGQUIT"
+        },
+        "Architecture": "arm64",
+        "Variant": "v8",
+        "Os": "linux",
+        "Size": 68507108,
+        "GraphDriver": {
+            "Data": null,
+            "Name": "overlayfs"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:6f51610e98184af12bb1cfab40f1ae13928363f1ea9aa19138467f09167e9809",
+                "sha256:4262c14e65b24d2d87a97a8436492beb3ae0cbcbd26382d4fecf4aa358c8eb04",
+                "sha256:6e2c7c0557ed32915c8243a004dfe3012a768aad48884a4f6a6f8c8afc45d4db",
+                "sha256:b0ca2628b7242315658a2db0aebf1aaa9114cd7fe0bc0f295a3c05eaa9b7a93d",
+                "sha256:5e4bbfe5d6499f37b5b697090ef1ed7da02df2de2d5be4888e8aff8b331f3a67",
+                "sha256:71639f1687ea9c31ae88f43ea09f5d3c6c6923bd33e4e97391df4d34941b221f",
+                "sha256:3a08247cbce95b8f5301a4c2397aeaa4ff49222d9a8a400e9228951605763c25"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2025-01-30T23:55:01.433892167Z"
+        }
+    }
+]
+➜  ~
+````
+
+
+
+## docker container inspect 컨테이너명
+
+``` bash
+➜  ~  docker container inspect defaultCmd
+[
+    {
+        "Id": "6a094bb233637300079ab4269288607930412eabd2aa4b34c797224e5d9a852f",
+        "Created": "2025-01-31T01:46:30.90737943Z",
+        "Path": "/docker-entrypoint.sh",
+        "Args": [
+            "nginx",
+            "-g",
+            "daemon off;"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 21078,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2025-01-31T01:46:30.95778518Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:0a399eb16751829e1af26fea27b20c3ec28d7ab1fb72182879dcae1cca21206a",
+        "ResolvConfPath": "/var/lib/docker/containers/6a094bb233637300079ab4269288607930412eabd2aa4b34c797224e5d9a852f/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/6a094bb233637300079ab4269288607930412eabd2aa4b34c797224e5d9a852f/hostname",
+        "HostsPath": "/var/lib/docker/containers/6a094bb233637300079ab4269288607930412eabd2aa4b34c797224e5d9a852f/hosts",
+        "LogPath": "/var/lib/docker/containers/6a094bb233637300079ab4269288607930412eabd2aa4b34c797224e5d9a852f/6a094bb233637300079ab4269288607930412eabd2aa4b34c797224e5d9a852f-json.log",
+        "Name": "/defaultCmd",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "bridge",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                25,
+                80
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": null,
+            "Name": "overlayfs"
+        },
+        "Mounts": [],
+        "Config": {
+            "Hostname": "6a094bb23363",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "80/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NGINX_VERSION=1.27.3",
+                "NJS_VERSION=0.8.7",
+                "NJS_RELEASE=1~bookworm",
+                "PKG_RELEASE=1~bookworm",
+                "DYNPKG_RELEASE=1~bookworm"
+            ],
+            "Cmd": [
+                "nginx",
+                "-g",
+                "daemon off;"
+            ],
+            "Image": "nginx",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/docker-entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e"
+            },
+            "StopSignal": "SIGQUIT"
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "895903b28a9edc8acabe791ec990d657e506257099f4805a5eeb467f27c4f1f5",
+            "SandboxKey": "/var/run/docker/netns/895903b28a9e",
+            "Ports": {
+                "80/tcp": null
+            },
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "e89a1c36d5074fe09ffe675acdebebbd253bfdacc137eb2f9d881070136ae1de",
+            "Gateway": "172.17.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "172.17.0.2",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "02:42:ac:11:00:02",
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "02:42:ac:11:00:02",
+                    "DriverOpts": null,
+                    "NetworkID": "0be5482a767f8d499ec894818bb10d24841880dec8d088ee30580a070f704cfe",
+                    "EndpointID": "e89a1c36d5074fe09ffe675acdebebbd253bfdacc137eb2f9d881070136ae1de",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]
+➜  ~           "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "02:42:ac:11:00:02",
+                    "DriverOpts": null,
+                    "NetworkID": "0be5482a767f8d499ec894818bb10d24841880dec8d088ee30580a070f704cfe",
+                    "EndpointID": "e89a1c36d5074fe09ffe675acdebebbd253bfdacc137eb2f9d881070136ae1de",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.2",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]
+```
+
+
+
+## docker run 이미지명 (실행명령)
+
+* nginx 이미지를 customCmd 이름의 컨테이너로 만들고 실행하면서 사용자가 지정한 명령을 출력을 수행하도록 하였다.
+* cat 명령어는 파일의 내용을 출력하고 종료하는 일회성 프로세스이므로, 컨테이너도 실행 후 바로 종료된다.
+* 컨테이너는 생성될 때 이미지의 데이터를 복사하여 만들어지기 때문에 실제로 컨테이너의 메타데이터를 바꾼다고 해서 이미지의 메타데이터가 바뀌지는 않는다.
+
+```bash
+➜  ~ docker run --name customCmd nginx cat usr/share/nginx/html/index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+➜  ~
+```
+
+
+
+## docker run -environment KEY=VALUE 이미지명
+
+* -environment 대신 -e를 적어도 가능하다.
+* ENV Node Color App : 사용자에게 특정 색상의 웹페이지를 응답해준다.
+  *  Node.js라는 JavaScript 기반으로 개발된 백엔드 애플리케이션이다.
+
+* 다음은 ENV Node Color App 이미지의 메타데이터이다.
+
+```bash
+➜  ~ docker image inspect devwikirepo/envnodecolorapp
+[
+    {
+        "Id": "sha256:982b6f0d4e65f3dc3394ed1057f35a09fb7e4968f48e1658031952988fcaa096",
+        "RepoTags": [
+            "devwikirepo/envnodecolorapp:latest"
+        ],
+        "RepoDigests": [
+            "devwikirepo/envnodecolorapp@sha256:982b6f0d4e65f3dc3394ed1057f35a09fb7e4968f48e1658031952988fcaa096"
+        ],
+        "Parent": "",
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2024-01-01T06:21:55.733841921Z",
+        "DockerVersion": "27.4.0",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "node",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "3000/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NODE_VERSION=14.21.3",
+                "YARN_VERSION=1.22.19",
+                "COLOR=red"
+            ],
+            "Cmd": [
+                "npm",
+                "start"
+            ],
+            "ArgsEscaped": true,
+            "Image": "",
+            "Volumes": null,
+            "WorkingDir": "/app",
+            "Entrypoint": [
+                "docker-entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": null
+        },
+        "Architecture": "arm64",
+        "Os": "linux",
+        "Size": 342245511,
+        "GraphDriver": {
+            "Data": null,
+            "Name": "overlayfs"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:173621e7addd9a122d7aa8c00c6741b6b4426b7b76d65cd26e33c42defc8f4d9",
+                "sha256:cfec405a23bc89639c747f170cc165513ee5689c72bb9f97bf3867b332e12e46",
+                "sha256:f3e76aaba7cc466ba4d2e82fc9793e1f31a0aa02cfeb3f0d8f6daee49cb6ec4e",
+                "sha256:82da4502ad28ee2d71f5f6706b53a848c9af3cf0a86c9c28cbb4e9d3c295827c",
+                "sha256:708291ce05346c36e436ab8b6f65e9cb194ead0fa4be7b7a9737c7b84f768e62",
+                "sha256:476197c298e4e088678ca20c8926bf187cbc0966548706119c1a3afcb4cf1ca6",
+                "sha256:20649f23472c55c0d1a6f51859a4cdf1c0ee387d1b6e1c6d7dff142e3e510150",
+                "sha256:b078da4dfde3335d754012aa1f4999f014a9d92c9d974365a504b40300011030",
+                "sha256:4d772e48367e80db04ffe51d27570fa07be0fe9da239ae16c0cc5767054f4742",
+                "sha256:2598f020922d939102af4c19dd7d0bdfbad8c610758b90b16eac83cce0891ac8",
+                "sha256:e57ecbb84cded9ca13582528286f225e0295c10e0dfd0b8fdf6e54dc67fe4974",
+                "sha256:3ede61dfeb2e455c3af3c139df7bb3a69001051e802a2d59854071cab4aa7a8b"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2025-01-31T02:18:37.083419668Z"
+        }
+    }
+]
+➜  ~
+```
+
+* 다음 명령을 통해 기본 컨테이너를 실행해보자.
+
+```bash
+➜  ~ docker run -d -p 8000:3000 --name defaultColorApp devwikirepo/envnodecolorapp
+0c5b7ef124f28bcf3461e9a8b11a77392709574d0643d98b533ab10869e357f6
+➜  ~
+```
+
+* 아래 명령을 통해 env 필드를 새롭게 덮어씌운 상태로 새로운 컨테이너를 실행할 수 있다.
+
+```bash
+➜  ~ docker run -d -p 8081:3000 --name blueColorApp --env COLOR=blue devwikirepo/envnodecolorapp
+a7ccc6e935349149d6e884e8cb431b8e9a963446ec000eea61c8f2d0369aadf5
+➜  ~
+```
+
+* blueColorApp 컨테이너의 COLOR env가 blue로 변경된 것을 확인할 수 있다.
+
+```bash
+➜  ~ docker container inspect blueColorApp
+[
+    {
+        "Id": "a7ccc6e935349149d6e884e8cb431b8e9a963446ec000eea61c8f2d0369aadf5",
+        "Created": "2025-01-31T02:23:16.062976297Z",
+        "Path": "docker-entrypoint.sh",
+        "Args": [
+            "npm",
+            "start"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 21579,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2025-01-31T02:23:16.108974506Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Image": "sha256:982b6f0d4e65f3dc3394ed1057f35a09fb7e4968f48e1658031952988fcaa096",
+        "ResolvConfPath": "/var/lib/docker/containers/a7ccc6e935349149d6e884e8cb431b8e9a963446ec000eea61c8f2d0369aadf5/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/a7ccc6e935349149d6e884e8cb431b8e9a963446ec000eea61c8f2d0369aadf5/hostname",
+        "HostsPath": "/var/lib/docker/containers/a7ccc6e935349149d6e884e8cb431b8e9a963446ec000eea61c8f2d0369aadf5/hosts",
+        "LogPath": "/var/lib/docker/containers/a7ccc6e935349149d6e884e8cb431b8e9a963446ec000eea61c8f2d0369aadf5/a7ccc6e935349149d6e884e8cb431b8e9a963446ec000eea61c8f2d0369aadf5-json.log",
+        "Name": "/blueColorApp",
+        "RestartCount": 0,
+        "Driver": "overlayfs",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": null,
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "bridge",
+            "PortBindings": {
+                "3000/tcp": [
+                    {
+                        "HostIp": "",
+                        "HostPort": "8081"
+                    }
+                ]
+            },
+            "RestartPolicy": {
+                "Name": "no",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": null,
+            "ConsoleSize": [
+                25,
+                80
+            ],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "private",
+            "Dns": [],
+            "DnsOptions": [],
+            "DnsSearch": [],
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": [],
+            "BlkioDeviceReadBps": [],
+            "BlkioDeviceWriteBps": [],
+            "BlkioDeviceReadIOps": [],
+            "BlkioDeviceWriteIOps": [],
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": [],
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": null,
+            "PidsLimit": null,
+            "Ulimits": [],
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware",
+                "/sys/devices/virtual/powercap"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": null,
+            "Name": "overlayfs"
+        },
+        "Mounts": [],
+        "Config": {
+            "Hostname": "a7ccc6e93534",
+            "Domainname": "",
+            "User": "node",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "3000/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "COLOR=blue",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NODE_VERSION=14.21.3",
+                "YARN_VERSION=1.22.19"
+            ],
+            "Cmd": [
+                "npm",
+                "start"
+            ],
+            "Image": "devwikirepo/envnodecolorapp",
+            "Volumes": null,
+            "WorkingDir": "/app",
+            "Entrypoint": [
+                "docker-entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {}
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "561f1214315f8c227be328b40d967df9d95bfac9c93de5eebef56c339b036b28",
+            "SandboxKey": "/var/run/docker/netns/561f1214315f",
+            "Ports": {
+                "3000/tcp": [
+                    {
+                        "HostIp": "0.0.0.0",
+                        "HostPort": "8081"
+                    }
+                ]
+            },
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "fd12b04fa69e085056c38e3b6e20556f14cf9a23a66ae7463ceb38b1eeeace71",
+            "Gateway": "172.17.0.1",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "172.17.0.4",
+            "IPPrefixLen": 16,
+            "IPv6Gateway": "",
+            "MacAddress": "02:42:ac:11:00:04",
+            "Networks": {
+                "bridge": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "02:42:ac:11:00:04",
+                    "DriverOpts": null,
+                    "NetworkID": "0be5482a767f8d499ec894818bb10d24841880dec8d088ee30580a070f704cfe",
+                    "EndpointID": "fd12b04fa69e085056c38e3b6e20556f14cf9a23a66ae7463ceb38b1eeeace71",
+                    "Gateway": "172.17.0.1",
+                    "IPAddress": "172.17.0.4",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "DNSNames": null
+                }
+            }
+        }
+    }
+]
 ➜  ~
 ```
 
